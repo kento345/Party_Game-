@@ -108,6 +108,7 @@ public class ColorChange : MonoBehaviour
     }
     void SetImageColor(Color color)
     {
+        color.a = image.color.a;
         image.color = color;
     }
 }

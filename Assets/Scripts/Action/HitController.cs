@@ -16,6 +16,10 @@ public class HitController : MonoBehaviour
         isAlive = true;
     }
 
+    /// <summary>
+    /// 攻撃を受けたら子供オブジェクト消去
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & bulletLayer) != 0)

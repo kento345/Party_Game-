@@ -9,7 +9,7 @@ public class Manager : MonoBehaviour
     [SerializeField]
     private List<GameObject> targetList = new();
 
-    public List<GameObject> TargetList { get; private set; } = new();
+    public IReadOnlyList<GameObject> TargetList  => targetList;
 
     void Awake()
     {

@@ -14,7 +14,7 @@ public class AtackController : MonoBehaviour
     //-----チャージ-------
     private const float chargeMax = 1.0f;   //Maxチャージ量
     private float curentCharge = 0f;        //現在のチャージ量
-
+  
     private GameObject curentBullet;
 
     /*    //-----硬直---------

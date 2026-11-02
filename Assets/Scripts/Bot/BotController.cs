@@ -5,6 +5,7 @@ public class BotController : MonoBehaviour
     [Header("移動,回転設定")]
     Vector2 inputVer;           //入力方向
     float curentNearDistance;   //現在の近い距離
+    
     GameObject nearPlayer;      //近くのPlayer  
     GameObject previousPlayer;  //前回のPlayer
 
@@ -69,6 +70,7 @@ public class BotController : MonoBehaviour
         }
         if (CheckObj() && !isRota)
         {
+            Debug.Log("近いPlayer");
             isRota = true;
             //0->-1,1->1になる
             rota = Random.Range(0, 2) == 0 ? -1 : 1;
@@ -162,7 +164,8 @@ public class BotController : MonoBehaviour
         nearPlayer = null;
 
         //PlayerListの中で一番近いPlayerを検索,取得
-        foreach (var p in JoinDataHolder.instance.GetPlayerData.Keys)
+        //foreach (var p in JoinDataHolder.instance.GetPlayerData.Keys)
+        foreach (var p in Manager.Instance.TargetList)
         {
             //自身は除外
             if (p == gameObject || p == null) continue;
@@ -214,18 +217,6 @@ public class BotController : MonoBehaviour
         if (move == null || atack == null) { return; }
         move.enabled = x;
         atack.enabled = x;
-    }
-
-    /// <summary>
-    /// 死亡処理(子供オブジェクトを非表示に)
-    /// </summary>
-    /// <param name="x"></param>
-    public void OnDeath(bool x)
-    {
-        foreach (Transform t in transform)
-        {
-            t.gameObject.SetActive(x);
-        }
     }
 
     /*

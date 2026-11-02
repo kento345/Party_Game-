@@ -51,18 +51,6 @@ public class PlayerInputController : MonoBehaviour
     }
 
     /// <summary>
-    /// 死亡処理(子供オブジェクトを非表示)
-    /// </summary>
-    /// <param name="x"></param>
-    public void OnDeath(bool x)
-    {
-        foreach (Transform t in transform)
-        {
-            t.gameObject.SetActive(x);
-        }
-    }
-
-    /// <summary>
     /// 移動,攻撃処理を停止
     /// </summary>
     /// <param name="x"></param>
