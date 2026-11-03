@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Mono.Cecil.Cil;
+using UnityEngine;
 
 public class BotController : MonoBehaviour
 {
@@ -9,49 +10,68 @@ public class BotController : MonoBehaviour
     GameObject nearPlayer;      //近くのPlayer  
     GameObject previousPlayer;  //前回のPlayer
 
-    float rota = 0;
-    float angle = 0;
-    bool isRota = false;
-
     public Vector2 InputVer => inputVer;  //入力値を参照
 
     [Header("攻撃設定")]
-    private bool wasAttack = false;
     private Vector3 moveTarget;
     private bool hasMove = false;
 
     [Header("判定")]
     [SerializeField] private LayerMask objectLayer;
     [SerializeField] private LayerMask playerLayer;
-    private float direction = 1.5f;
-    Ray ray;
-    RaycastHit hit;
-
+    private float direction = 1.5f; //Rayの距離
+    Ray ray; //Ray
+    RaycastHit hit; //RayHit情報
 
     //-----Component-----
 
 
     //-----Script-----
-    private StateManager state;
-    private AtackController atack;
-    private SensorController sensor;
-    MoveControlleer move;
+    MoveControlleer move;            //移動Script
+    private AtackController atack;   //攻撃Script
+    private StateManager state;      //ステートScript
+    private SensorController sensor; //センサーScript
 
 
     void Start()
     {
-        state = GetComponent<StateManager>();
-        atack = GetComponent<AtackController>();
         move  = GetComponent<MoveControlleer>();
+        atack = GetComponent<AtackController>();
+        state = GetComponent<StateManager>();
         sensor = GetComponentInChildren<SensorController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        /*
+         *-----BOTの行動パターン-----
+         * 行動攻撃処理に移行できるのか
+         * 　|-攻撃中return
+         * 一番近くのPlayerを探査,登録
+         *   |
+         * ターゲット追跡
+         *   |-ターゲットとの距離が指定以上中は追跡
+         * チャージに移行
+         *   |-距離が指定以上はチャージ
+         * 移動停止,ターゲット方向に回転
+         *   |-センサーに触れるまで回転
+         * センサーがターゲットに触れたら攻撃
+         *   |-
+         *   
+         */
         if (state.attackState == AttackState.Atatck) { return; }
-        if (wasAttack)
+        //近くのPlayerオブジェクトがない場合探査
+        if(nearPlayer == null)
+        {
+            NearPlayer();
+            return;
+        }
+        Chase(nearPlayer.transform.position);
+
+
+
+       /* if (wasAttack)
         {
             if (!hasMove)
             {
@@ -62,7 +82,6 @@ public class BotController : MonoBehaviour
             var dist = Vector3.Distance(transform.position, moveTarget);
             if (dist < 2f)
             {
-                wasAttack = false;
                 hasMove = false;
                 nearPlayer = null;
                 return;
@@ -112,7 +131,7 @@ public class BotController : MonoBehaviour
                     atack.Attack(AttackState.Atatck);
                     previousPlayer = nearPlayer;
                     nearPlayer = null;
-                    wasAttack = true;
+                    //wasAttck = true;
                     return;
                 }
                 if (dist < 4f)
@@ -127,11 +146,11 @@ public class BotController : MonoBehaviour
                         
                         previousPlayer = nearPlayer;
                         nearPlayer = null;
-                        wasAttack = true;
+                        //wasAttack = true;
                     }
                 }
             }
-        }
+        }*/
 
        
     }
@@ -158,29 +177,32 @@ public class BotController : MonoBehaviour
     /// で初期化される。</remarks>
     void NearPlayer()
     {
-        //if(GameManager.Instance.playerList == null)return;
         //初期化
         curentNearDistance = Mathf.Infinity;
         nearPlayer = null;
+        var myPos = transform.position;
 
         //PlayerListの中で一番近いPlayerを検索,取得
         //foreach (var p in JoinDataHolder.instance.GetPlayerData.Keys)
         foreach (var p in Manager.Instance.TargetList)
         {
-            //自身は除外
-            if (p == gameObject || p == null) continue;
-            // 死亡しているなら除外
+            //除外処理(自身,null,前回のターゲット,死亡者)
+            if (p == gameObject || p == null || p == previousPlayer) continue;
             var life = p.GetComponent<HitController>();
             if(life != null)
             {
+                // 死亡しているなら除外
                 if (!life.IsAlive) continue;
             }
 
             //2点間の距離計算
-            var dist = Vector3.Distance(transform.position, p.transform.position);
-            if (dist < curentNearDistance)
+            var dist = p.transform.position - myPos;
+            var sqrDist = dist.sqrMagnitude;
+
+            //curentNearDistanceより小さい場合登録
+            if (sqrDist < curentNearDistance)
             {
-                curentNearDistance = dist;
+                curentNearDistance = sqrDist;
                 nearPlayer = p;
             }
         }
@@ -193,9 +215,18 @@ public class BotController : MonoBehaviour
     {
         var dir = targetPosition - transform.position;
         dir.y = 0f;
-        var localDir = transform.InverseTransformDirection(dir.normalized);
-        inputVer = new Vector2 (localDir.x, localDir.z);
-        OnMove(inputVer);
+
+        //相手までの角度計算
+        float angle = Vector3.SignedAngle(transform.forward,
+                                          dir.normalized, 
+                                          Vector3.up );
+
+        if(Mathf.Abs(angle) > 5f){
+            OnMove(new Vector2(Mathf.Sign(angle), 0f));
+        }
+        else{
+            OnMove(new Vector2(0, 1));
+        }
     }
 
     /// <summary>
@@ -218,13 +249,4 @@ public class BotController : MonoBehaviour
         move.enabled = x;
         atack.enabled = x;
     }
-
-    /*
-     *-----BOTの行動パターン-----
-     * 1:近くの敵を探索
-     * 2:ターゲットの方向に移動
-     * 3:距離によって攻撃開始
-     * 4:Objectに当たりそうなら回避行動
-     * 5:
-     */
 }
