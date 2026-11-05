@@ -532,6 +532,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 9112292455416157261, guid: 40d674c374591494ba070787c84be016, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -694,6 +698,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 2747569295512726157, guid: 2ded3df3b0866314abfac486aceb97dd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4316862195040603816, guid: 2ded3df3b0866314abfac486aceb97dd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -733,6 +741,10 @@ PrefabInstance:
     - target: {fileID: 4316862195040603816, guid: 2ded3df3b0866314abfac486aceb97dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4368377305473955015, guid: 2ded3df3b0866314abfac486aceb97dd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5977645098002110699, guid: 2ded3df3b0866314abfac486aceb97dd, type: 3}
       propertyPath: m_Layer
