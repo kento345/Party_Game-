@@ -3,59 +3,59 @@ using UnityEngine.UI;
 
 public class ChargeController : MonoBehaviour
 {
-    [SerializeField] private float maxChargeTime = 1.5f;
-    [SerializeField] private float maxPos = 500f;
-    [SerializeField] private float maxSize = 300f;
-    [SerializeField] private Image pointImage;
-    [SerializeField] private Image arrowImage;
+    [SerializeField] private float _maxChargeTime = 1.5f;
+    [SerializeField] private float _maxPos        = 500f;
+    [SerializeField] private float _maxSize       = 300f;
+    [SerializeField] private Image _pointImage;
+    [SerializeField] private Image _arrowImage;
     //position
-    RectTransform pos;
-    Vector2 initPos = new Vector2(0, 250);
+    RectTransform _pos;
+    Vector2 _initPos = new Vector2(0, 250);
     //height
-    RectTransform imageSize;
-    Vector2 initSize = new Vector2(100, 100);
+    RectTransform _imageSize;
+    Vector2 _initSize = new Vector2(100, 100);
 
 
-    private AtackController ac;
-    private StateManager stateManager;
+    private AtackController _ac;
+    private StateManager _stateManager;
 
     private void Awake()
     {
-        ac = GetComponent<AtackController>();
-        stateManager = GetComponent<StateManager>();
+        _ac = GetComponent<AtackController>();
+        _stateManager = GetComponent<StateManager>();
 
-        pos = pointImage.rectTransform;
-        imageSize = arrowImage.rectTransform;
-        pos.anchoredPosition = initPos;
-        imageSize.sizeDelta = initSize;
+        _pos = _pointImage.rectTransform;
+        _imageSize = _arrowImage.rectTransform;
+        _pos.anchoredPosition = _initPos;
+        _imageSize.sizeDelta = _initSize;
     }
 
     private void Update()
     {
-        if (stateManager.attackState == AttackState.Charge)
+        if (_stateManager.attackState == AttackState.Charge)
         {
-            pointImage.enabled = true;
-            float speed = (maxPos - initPos.y) / maxChargeTime;
-            float speedSize = (maxSize - initSize.y) / maxChargeTime;
-            float height = pos.anchoredPosition.y;
-            float heightSize = imageSize.sizeDelta.y;
+            _pointImage.enabled = true;
+            float speed = (_maxPos - _initPos.y) / _maxChargeTime;
+            float speedSize = (_maxSize - _initSize.y) / _maxChargeTime;
+            float height = _pos.anchoredPosition.y;
+            float heightSize = _imageSize.sizeDelta.y;
             height += speed * Time.deltaTime;
             heightSize += speedSize * Time.deltaTime;
 
-            height = Mathf.Clamp(height, initPos.y, maxPos);
-            heightSize = Mathf.Clamp(heightSize, initSize.y, maxSize);
+            height = Mathf.Clamp(height, _initPos.y, _maxPos);
+            heightSize = Mathf.Clamp(heightSize, _initSize.y, _maxSize);
 
-            pos.anchoredPosition = new Vector2(initPos.x,height);
-            imageSize.sizeDelta = new Vector2(imageSize.sizeDelta.x, heightSize);
-            float chargeRate = (height - initPos.y) / (maxPos - initPos.y);
-            ac.SetCharge(chargeRate, pointImage.transform.position);
+            _pos.anchoredPosition = new Vector2(_initPos.x,height);
+            _imageSize.sizeDelta = new Vector2(_imageSize.sizeDelta.x, heightSize);
+            float chargeRate = (height - _initPos.y) / (_maxPos - _initPos.y);
+            _ac.SetCharge(chargeRate, _pointImage.transform.position);
         }
         else
         {
-            pos.anchoredPosition = initPos;
-            imageSize.sizeDelta = initSize;
-            ac.SetCharge(0);
-            pointImage.enabled = false;
+            _pos.anchoredPosition = _initPos;
+            _imageSize.sizeDelta = _initSize;
+            _ac.SetCharge(0);
+            _pointImage.enabled = false;
         } 
     }
 }

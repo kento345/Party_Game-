@@ -4,41 +4,40 @@ using UnityEngine;
 public class BotController : MonoBehaviour
 {
     [Header("移動,回転設定")]
-    Vector2 inputVer;           //入力方向
-    float curentNearDistance;   //現在の近い距離
+    Vector2 _inputVer;           //入力方向
+    float _curentNearDistance;   //現在の近い距離
     
-    GameObject nearPlayer;      //近くのPlayer  
-    GameObject previousPlayer;  //前回のPlayer
+    GameObject _nearPlayer;      //近くのPlayer  
+    GameObject _previousPlayer;  //前回のPlayer
 
-    public Vector2 InputVer => inputVer;  //入力値を参照
+    public Vector2 InputVer => _inputVer;  //入力値を参照
 
     [Header("攻撃設定")]
-    private Vector3 moveTarget;
-    private bool hasMove = false;
+    private Vector3 _moveTarget;
+    private bool _hasMove = false;
 
     [Header("判定")]
-    [SerializeField] private LayerMask objectLayer;
-    [SerializeField] private LayerMask playerLayer;
-    private float direction = 1.5f; //Rayの距離
-    Ray ray; //Ray
-    RaycastHit hit; //RayHit情報
+    [SerializeField] private LayerMask _objectLayer;
+    [SerializeField] private LayerMask _playerLayer;
+    private float _direction = 1.5f; //Rayの距離
+    Ray _ray; //Ray
+    RaycastHit _hit; //RayHit情報
 
     //-----Component-----
 
 
     //-----Script-----
-    MoveControlleer move;            //移動Script
-    private AtackController atack;   //攻撃Script
-    private StateManager state;      //ステートScript
-    private SensorController sensor; //センサーScript
-
+    MoveControlleer _move;            //移動Script
+    private AtackController _atack;   //攻撃Script
+    private StateManager _state;      //ステートScript
+    private SensorController _sensor; //センサーScript
 
     void Start()
     {
-        move  = GetComponent<MoveControlleer>();
-        atack = GetComponent<AtackController>();
-        state = GetComponent<StateManager>();
-        sensor = GetComponentInChildren<SensorController>();
+        _move  = GetComponent<MoveControlleer>();
+        _atack = GetComponent<AtackController>();
+        _state = GetComponent<StateManager>();
+        _sensor = GetComponentInChildren<SensorController>();
     }
 
     // Update is called once per frame
@@ -60,14 +59,19 @@ public class BotController : MonoBehaviour
          *   |-
          *   
          */
-        if (state.attackState == AttackState.Atatck) { return; }
+        if (_state.attackState == AttackState.Atatck) { return; }
         //近くのPlayerオブジェクトがない場合探査
-        if(nearPlayer == null)
+        if(_nearPlayer == null)
         {
             NearPlayer();
             return;
         }
-        Chase(nearPlayer.transform.position);
+        Chase(_nearPlayer.transform.position);
+
+        if (Dist(_nearPlayer.transform.position) <= 0.4f)
+        {
+            Debug.Log("Stop");
+        }
 
 
 
@@ -163,10 +167,10 @@ public class BotController : MonoBehaviour
     {
         var origin = transform.position + new Vector3(0, 0.5f, 0);
         var dir = transform.forward;
-        ray = new Ray(origin, dir);
-        Debug.DrawRay(origin, dir * direction, Color.red);
+        _ray = new Ray(origin, dir);
+        Debug.DrawRay(origin, dir * _direction, Color.red);
 
-        return Physics.Raycast(ray, out hit, direction, objectLayer);
+        return Physics.Raycast(_ray, out _hit, _direction, _objectLayer);
     }
 
     /// <summary>
@@ -178,8 +182,8 @@ public class BotController : MonoBehaviour
     void NearPlayer()
     {
         //初期化
-        curentNearDistance = Mathf.Infinity;
-        nearPlayer = null;
+        _curentNearDistance = Mathf.Infinity;
+        _nearPlayer = null;
         var myPos = transform.position;
 
         //PlayerListの中で一番近いPlayerを検索,取得
@@ -187,7 +191,7 @@ public class BotController : MonoBehaviour
         foreach (var p in Manager.Instance.TargetList)
         {
             //除外処理(自身,null,前回のターゲット,死亡者)
-            if (p == gameObject || p == null || p == previousPlayer) continue;
+            if (p == gameObject || p == null || p == _previousPlayer) continue;
             var life = p.GetComponent<HitController>();
             if(life != null)
             {
@@ -200,10 +204,10 @@ public class BotController : MonoBehaviour
             var sqrDist = dist.sqrMagnitude;
 
             //curentNearDistanceより小さい場合登録
-            if (sqrDist < curentNearDistance)
+            if (sqrDist < _curentNearDistance)
             {
-                curentNearDistance = sqrDist;
-                nearPlayer = p;
+                _curentNearDistance = sqrDist;
+                _nearPlayer = p;
             }
         }
     }
@@ -229,14 +233,21 @@ public class BotController : MonoBehaviour
         }
     }
 
+    float Dist(Vector3 targetPosition)
+    {
+        var dir = targetPosition - transform.position;
+        dir.y = 0f;
+        return dir.sqrMagnitude;
+    }
+
     /// <summary>
     /// 入力値などの変更
     /// </summary>
     /// <param name="context"></param>
     void OnMove(Vector2 context)
     {
-        move.SetMoveInput(context);
-        inputVer = context;
+        _move.SetMoveInput(context);
+        _inputVer = context;
     }
 
     /// <summary>
@@ -245,8 +256,8 @@ public class BotController : MonoBehaviour
     /// <param name="x"></param>
     public void OnMoveStop(bool x)
     {
-        if (move == null || atack == null) { return; }
-        move.enabled = x;
-        atack.enabled = x;
+        if (_move == null || _atack == null) { return; }
+        _move.enabled = x;
+        _atack.enabled = x;
     }
 }

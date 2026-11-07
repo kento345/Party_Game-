@@ -4,44 +4,44 @@ using UnityEngine.UI;
 
 public class ColorChange : MonoBehaviour
 {
-    private List<Material> tankColors = new();
+    private List<Material> _tankColors = new();
 
-    PlayerInputController inputCon;
-    BotController botCon;
+    PlayerInputController _inputCon; 
+    BotController _botCon;
 
-    Image image;
+    Image _image;
 
     private void OnEnable()
     {
-        inputCon = GetComponentInParent<PlayerInputController>();
-        botCon = GetComponentInParent<BotController>();
+        _inputCon = GetComponentInParent<PlayerInputController>();
+        _botCon = GetComponentInParent<BotController>();
 
-        if(inputCon != null)
+        if(_inputCon != null)
         {
-            inputCon.OnMoveStop(true);
+            _inputCon.OnMoveStop(true);
         }
-        if (botCon != null)
+        if (_botCon != null)
         {
-            botCon.OnMoveStop(true);
+            _botCon.OnMoveStop(true);
         }
     }
 
     private void OnDisable()
     {
-        if(inputCon != null)
+        if(_inputCon != null)
         {
-            inputCon.OnMoveStop(false);
+            _inputCon.OnMoveStop(false);
         }
-        if (botCon != null)
+        if (_botCon != null)
         {
-            botCon.OnMoveStop(false);
+            _botCon.OnMoveStop(false);
         }
     }
 
     private void Start()
     {
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-        image = GetComponent<Image>();
+        _image = GetComponent<Image>();
         if(JoinDataHolder.instance != null)
         {
             var id = JoinDataHolder.instance.GetPlayerData[transform.root.gameObject];
@@ -53,7 +53,7 @@ public class ColorChange : MonoBehaviour
                     {
                         if (material.name.Contains("TankColor"))
                         {
-                            tankColors.Add(material);
+                            _tankColors.Add(material);
                         }
                     }
                 }
@@ -76,7 +76,7 @@ public class ColorChange : MonoBehaviour
                 }
             }
 
-            if (image != null)
+            if (_image != null)
             {
                 switch (id)
                 {
@@ -101,14 +101,14 @@ public class ColorChange : MonoBehaviour
 
     void SetColor(Color color)
     {
-        foreach (var material in tankColors)
+        foreach (var material in _tankColors)
         {
             material.color = color;
         }
     }
     void SetImageColor(Color color)
     {
-        color.a = image.color.a;
-        image.color = color;
+        color.a = _image.color.a;
+        _image.color = color;
     }
 }

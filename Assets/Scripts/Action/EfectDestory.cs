@@ -2,23 +2,23 @@
 
 public class EfectDestory : MonoBehaviour
 {
-    float time = 0f;
+    float _time = 0f;
 
-    float t = 2;
+    float _t = 2;
 
     void Start()
     {
-        time = t;
+        _time = _t;
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        if(time >= 0)
+        if(_time >= 0)
         {
-            time -= Time.deltaTime;
-            if(time < 0)
+            _time -= Time.deltaTime;
+            if(_time < 0)
             {
                 Destroy(gameObject);
             }

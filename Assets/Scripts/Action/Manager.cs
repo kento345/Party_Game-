@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +7,9 @@ public class Manager : MonoBehaviour
     public static Manager Instance { get; private set; }
 
     [SerializeField]
-    private List<GameObject> targetList = new();
+    private List<GameObject> _targetList = new();
 
-    public IReadOnlyList<GameObject> TargetList  => targetList;
+    public IReadOnlyList<GameObject> TargetList  => _targetList;
 
     void Awake()
     {

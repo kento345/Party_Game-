@@ -4,27 +4,27 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem exprosionPrefab;
-    private float height = 2f;
-    private float duration = 1f;
-    private float angle = 0;
-    public GameObject Owner { get; private set; }
+    [SerializeField] private ParticleSystem _exprosionPrefab;
+    private float _height = 2f;
+    private float _duration = 1f;
+    private float _angle = 0;
+    public GameObject _Owner { get; private set; }
 
-    [SerializeField] private LayerMask hitLayer;
+    [SerializeField] private LayerMask _hitLayer;
 
-    Rigidbody rb;
-    AtackController attack;
+    Rigidbody _rb;
+    AtackController _attack;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        if (transform.position.y < height)
+        if (transform.position.y < _height)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(30, angle, 0), Time.deltaTime * 10f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(30, _angle, 0), Time.deltaTime * 10f);
         }
     }
 
@@ -32,7 +32,7 @@ public class BulletController : MonoBehaviour
     {
         transform.position = startPos;
 
-        transform.DOJump(endPos, height, 1, duration).SetEase(Ease.Linear);
+        transform.DOJump(endPos, _height, 1, _duration).SetEase(Ease.Linear);
     }
 
     /// <summary>
@@ -42,8 +42,8 @@ public class BulletController : MonoBehaviour
     /// <param name="a"></param>
     public void SetAttackController(AtackController controller ,float a)
     {
-        attack = controller;
-        angle = a;
+        _attack = controller;
+        _angle = a;
     }
 
     /// <summary>
@@ -52,16 +52,16 @@ public class BulletController : MonoBehaviour
     /// <param name="owner"></param>
     public void SetOwner(GameObject owner)
     {
-        Owner = owner;
+        _Owner = owner;
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (((1 << other.gameObject.layer) & hitLayer) != 0)
+        if (((1 << other.gameObject.layer) & _hitLayer) != 0)
         {
-            attack.BulletDestory();
-            var obj = Instantiate(exprosionPrefab, transform.position, Quaternion.identity);
+            _attack.BulletDestory();
+            var obj = Instantiate(_exprosionPrefab, transform.position, Quaternion.identity);
             obj.Play();
             Destroy(this.gameObject);
         }

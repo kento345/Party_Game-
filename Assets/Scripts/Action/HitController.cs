@@ -3,17 +3,17 @@ using UnityEngine;
 
 public class HitController : MonoBehaviour
 {
-    [SerializeField] private LayerMask bulletLayer = default;
-    private bool isAlive = false;
+    [SerializeField] private LayerMask _bulletLayer = default;
+    private bool _isAlive = false;
     /// <summary>
     /// 生存処理(生:true,死:false)
     /// </summary>
-    public bool IsAlive => isAlive;
+    public bool IsAlive => _isAlive;
 
 
     private void Awake()
     {
-        isAlive = true;
+        _isAlive = true;
     }
 
     /// <summary>
@@ -22,20 +22,20 @@ public class HitController : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (((1 << other.gameObject.layer) & bulletLayer) != 0)
+        if (((1 << other.gameObject.layer) & _bulletLayer) != 0)
         {
             var b = other.gameObject.GetComponent<BulletController>();
             // BulletControllerがないなら無視
             if (b == null)
                 return;
             // 自分が撃ったBulletなら無視
-            if (b.Owner == gameObject)
+            if (b._Owner == gameObject)
                 return;
             foreach (Transform t in transform)
             {
                 t.gameObject.SetActive(false);
             }
-            isAlive = false;
+            _isAlive = false;
         }
     }
 }
