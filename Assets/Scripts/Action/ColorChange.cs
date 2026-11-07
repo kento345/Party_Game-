@@ -42,9 +42,9 @@ public class ColorChange : MonoBehaviour
     {
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
         _image = GetComponent<Image>();
-        if(JoinDataHolder.instance != null)
+        if(JoinDataHolder.Instance != null)
         {
-            var id = JoinDataHolder.instance.GetPlayerData[transform.root.gameObject];
+            var id = JoinDataHolder.Instance.GetPlayerData[transform.root.gameObject];
             if (renderers != null)
             {
                 foreach (var renderer in renderers)

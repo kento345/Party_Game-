@@ -43,29 +43,29 @@ public enum State
 public class StateManager : MonoBehaviour
 {
 
-    public MoveState moveState {  get; private set; } = MoveState.Idel;
-    public AttackState attackState { get; private set; } = AttackState.None;
-    public AtackPower attackPower { get;private set; }   = AtackPower.None;
-    public State state { get; private set; } = State.None;
+    public MoveState _moveState {  get; private set; } = MoveState.Idel;
+    public AttackState _attackState { get; private set; } = AttackState.None;
+    public AtackPower _attackPower { get;private set; }   = AtackPower.None;
+    public State _state { get; private set; } = State.None;
 
     /// <summary>
     /// ステート更新
     /// </summary>
     public void UpdateMoveState(Vector2 inputVer)
     {
-        moveState = inputVer.sqrMagnitude > 0.01 ? MoveState.Walk:MoveState.Idel;
+        _moveState = inputVer.sqrMagnitude > 0.01 ? MoveState.Walk:MoveState.Idel;
     }
 
     public void SetAttackState(AttackState state)
     {
-        attackState = state;
+        _attackState = state;
     }
     public void SetAttackPower(AtackPower power)
     {
-        attackPower = power;
+        _attackPower = power;
     }
     public void SetState(State State)
     {
-        state = State;
+        _state = State;
     }
 }

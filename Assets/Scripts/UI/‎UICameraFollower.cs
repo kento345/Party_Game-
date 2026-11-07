@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UICameraFollower : MonoBehaviour
 {
-    public static readonly List<Transform> uiList = new();
+    public static readonly List<Transform> _uiList = new();
 
     void LateUpdate()
     {
@@ -11,9 +11,9 @@ public class UICameraFollower : MonoBehaviour
 
         Quaternion camRot = Camera.main.transform.rotation;
 
-        for (int i = 0; i < uiList.Count; i++)
+        for (int i = 0; i < _uiList.Count; i++)
         {
-            uiList[i].rotation = camRot;
+            _uiList[i].rotation = camRot;
         }
     }
 }

@@ -32,7 +32,7 @@ public class ChargeController : MonoBehaviour
 
     private void Update()
     {
-        if (_stateManager.attackState == AttackState.Charge)
+        if (_stateManager._attackState == AttackState.Charge)
         {
             _pointImage.enabled = true;
             float speed = (_maxPos - _initPos.y) / _maxChargeTime;

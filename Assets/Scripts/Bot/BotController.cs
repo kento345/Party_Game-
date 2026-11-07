@@ -59,7 +59,7 @@ public class BotController : MonoBehaviour
          *   |-
          *   
          */
-        if (_state.attackState == AttackState.Atatck) { return; }
+        if (_state._attackState == AttackState.Atatck) { return; }
         //近くのPlayerオブジェクトがない場合探査
         if(_nearPlayer == null)
         {

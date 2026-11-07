@@ -69,20 +69,20 @@ public class AtackController : MonoBehaviour
         //チャージ開始(ステートをチャージ中に)
         if (state == AttackState.Charge)
         {
-            if (_stateManager.attackState == AttackState.Cooldown || _stateManager.attackState == AttackState.Charge) { return; }
+            if (_stateManager._attackState == AttackState.Cooldown || _stateManager._attackState == AttackState.Charge) { return; }
             _stateManager.SetAttackState(state);
         }
         //攻撃開始
         if (state == AttackState.Atatck && _curentBullet == null)
         {
-            if (_stateManager.attackState == AttackState.Cooldown) { return; }
+            if (_stateManager._attackState == AttackState.Cooldown) { return; }
 
-            if (_stateManager.attackState == AttackState.Charge)
+            if (_stateManager._attackState == AttackState.Charge)
             {
                 _stateManager.SetAttackState(state);
                 //attackPowerステートがStrongならstrongPower,それ以外ならweakPower
-                _curentPower = _stateManager.attackPower == AtackPower.Strong ? _strongPower : _weakPower;
-                if(_stateManager.attackPower == AtackPower.Strong)
+                _curentPower = _stateManager._attackPower == AtackPower.Strong ? _strongPower : _weakPower;
+                if(_stateManager._attackPower == AtackPower.Strong)
                 {
                     _curentPower = _strongPower;
                 }

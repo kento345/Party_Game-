@@ -4,20 +4,20 @@ using UnityEngine.InputSystem;
 public class PlayerInputController : MonoBehaviour
 {
     //入力値
-    Vector2 inputVer;
+    Vector2 _inputVer;
     //入力値を参照
-    public Vector2 InputVer => inputVer;
+    public Vector2 InputVer => _inputVer;
 
     //-----Script-----
-    private StateManager state;
-    private MoveControlleer move;
-    private AtackController atack;
+    private StateManager _state;
+    private MoveControlleer _move;
+    private AtackController _atack;
 
     private void Awake()
     {
-        state = GetComponent<StateManager>();
-        move = GetComponent<MoveControlleer>();
-        atack = GetComponent<AtackController>();
+        _state = GetComponent<StateManager>();
+        _move = GetComponent<MoveControlleer>();
+        _atack = GetComponent<AtackController>();
     }
 
 
@@ -27,10 +27,10 @@ public class PlayerInputController : MonoBehaviour
     /// <param name="context"></param>
     public void OnMove(InputAction.CallbackContext context)
     {
-        inputVer = context.ReadValue<Vector2>();
+        _inputVer = context.ReadValue<Vector2>();
         //入力の更新
         //state.UpdateMoveState(inputVer);
-        move.SetMoveInput(inputVer);
+        _move.SetMoveInput(_inputVer);
     }
 
 
@@ -42,11 +42,11 @@ public class PlayerInputController : MonoBehaviour
     {
         if (context.performed)
         {
-            atack.Attack(AttackState.Charge);
+            _atack.Attack(AttackState.Charge);
         }
         if (context.canceled)
         {
-            atack.Attack(AttackState.Atatck);
+            _atack.Attack(AttackState.Atatck);
         }
     }
 
@@ -56,8 +56,8 @@ public class PlayerInputController : MonoBehaviour
     /// <param name="x"></param>
     public void OnMoveStop(bool x)
     {
-        if (move == null || atack == null) { return; }
-        move.enabled = x;
-        atack.enabled = x;
+        if (_move == null || _atack == null) { return; }
+        _move.enabled = x;
+        _atack.enabled = x;
     }
 }

@@ -44,14 +44,14 @@ public class MoveControlleer : MonoBehaviour
         _curentSpeed = _speed;
         _curentRotaSpeed = _rotaSpeed;
 
-        if (_stateManager.attackState == AttackState.Charge)
+        if (_stateManager._attackState == AttackState.Charge)
         {
             _curentSpeed = _speed2;
             _curentRotaSpeed = _rotaSpeed2;
         }
 
         //攻撃以外の時の処理
-        if (_stateManager.attackState != AttackState.Atatck)
+        if (_stateManager._attackState != AttackState.Atatck)
         {
             //移動処理
             Vector3 move = transform.forward * _inputVer.y * _curentSpeed * Time.fixedDeltaTime;

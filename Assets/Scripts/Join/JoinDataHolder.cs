@@ -4,30 +4,30 @@ using UnityEngine.InputSystem;
 
 public class JoinDataHolder : MonoBehaviour
 {
-    public static JoinDataHolder instance { get; private set;}
-    private Dictionary<GameObject, int> playerData= new ();
+    public static JoinDataHolder Instance { get; private set;}
+    private Dictionary<GameObject, int> _playerData= new ();
     //参照専用
     
-    public IReadOnlyDictionary<GameObject, int> GetPlayerData => playerData;
+    public IReadOnlyDictionary<GameObject, int> GetPlayerData => _playerData;
 
     private void Awake()
     {
-        if(instance != null && instance != this)
+        if(Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     public void SetPlayerData(GameObject player,int id)
     {
-        playerData.Add(player, id);
+        _playerData.Add(player, id);
     }
 
     public void RemoveBotData(GameObject bot)
     {
-        playerData.Remove(bot);
+        _playerData.Remove(bot);
     }
 }
